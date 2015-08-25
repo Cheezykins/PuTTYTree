@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PuTTYTree.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PuTTYPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="PuTTYRegPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
