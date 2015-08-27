@@ -37,13 +37,26 @@ namespace PuTTYTree.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("HKEY_CURRENT_USER\\Software\\SimonTatham\\PuTTY\\Sessions\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Software\\SimonTatham\\PuTTY\\Sessions\\")]
         public string PuTTYRegPath {
             get {
                 return ((string)(this["PuTTYRegPath"]));
             }
             set {
                 this["PuTTYRegPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />")]
+        public global::System.Collections.Specialized.StringCollection Directories {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Directories"]));
+            }
+            set {
+                this["Directories"] = value;
             }
         }
     }

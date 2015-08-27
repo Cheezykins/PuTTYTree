@@ -1,6 +1,4 @@
 ﻿using Microsoft.Win32;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace PuTTYTree
 {
@@ -11,13 +9,12 @@ namespace PuTTYTree
             return hive.OpenSubKey(regPath);
         }
 
-        public static Hashtable getValues(RegistryKey registryKey)
+        public static Session getSession(RegistryKey registryKey)
         {
-            Hashtable ret = new Hashtable();
+            Session ret = new Session();
 
             if (registryKey != null)
             {
-
                 string[] valueKeys = registryKey.GetValueNames();
 
                 foreach (string key in valueKeys)
@@ -25,10 +22,11 @@ namespace PuTTYTree
                     RegistryValue value = new RegistryValue()
                     {
                         kind = registryKey.GetValueKind(key),
-                        value = (string)registryKey.GetValue(key)
+                        key = key,
+                        value = registryKey.GetValue(key).ToString()
                     };
 
-                    ret.Add(key, value);
+                    ret.Add(value);
                 }
             }
 
@@ -37,7 +35,6 @@ namespace PuTTYTree
 
         public static string[] getSubKeys(RegistryKey registryKey)
         {
-
             string[] subKeys = new string[] { };
 
             if (registryKey != null)

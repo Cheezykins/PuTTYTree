@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 using NUnit.Framework;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PuTTYTree.Test
@@ -35,37 +35,6 @@ namespace PuTTYTree.Test
         }
 
         [Test]
-        public void GetValuesReturnsEmptyOnFail()
-        {
-            RegistryKey hive = Registry.LocalMachine;
-
-            using (RegistryKey regKey = RegistryManager.getKey(hive, badPath))
-            {
-                Hashtable values = RegistryManager.getValues(regKey);
-                Assert.IsEmpty(values);
-            }
-        }
-
-        [Test]
-        public void GetValuesReturnsData()
-        {
-            RegistryKey hive = Registry.LocalMachine;
-
-            using (RegistryKey regKey = RegistryManager.getKey(hive, goodPath))
-            {
-                Hashtable values = RegistryManager.getValues(regKey);
-
-                Assert.IsNotEmpty(values);
-
-                RegistryValue value = (RegistryValue)values["ProgramFilesDir"];
-
-                Assert.IsInstanceOf<RegistryValue>(value);
-                Assert.IsInstanceOf<string>(value.value);
-                Assert.IsInstanceOf<RegistryValueKind>(value.kind);
-            }
-        }
-
-        [Test]
         public void GetSubKeysReturnsEmptyOnFail()
         {
             RegistryKey hive = Registry.LocalMachine;
@@ -75,6 +44,37 @@ namespace PuTTYTree.Test
                 string[] subkeys = RegistryManager.getSubKeys(regKey);
 
                 Assert.IsEmpty(subkeys);
+            }
+        }
+
+        [Test]
+        public void GetSessionsReturnsData()
+        {
+            RegistryKey hive = Registry.LocalMachine;
+
+            using (RegistryKey regKey = RegistryManager.getKey(hive, goodPath))
+            {
+                List<RegistryValue> values = RegistryManager.getSession(regKey);
+
+                Assert.IsNotEmpty(values);
+
+                RegistryValue value = (RegistryValue)values.Where(r => r.key.Equals("ProgramFilesDir")).Single();
+
+                Assert.IsInstanceOf<RegistryValue>(value);
+                Assert.IsInstanceOf<string>(value.value);
+                Assert.IsInstanceOf<RegistryValueKind>(value.kind);
+            }
+        }
+
+        [Test]
+        public void GetSessionsReturnsEmptyOnFail()
+        {
+            RegistryKey hive = Registry.LocalMachine;
+
+            using (RegistryKey regKey = RegistryManager.getKey(hive, badPath))
+            {
+                List<RegistryValue> values = RegistryManager.getSession(regKey);
+                Assert.IsEmpty(values);
             }
         }
 
