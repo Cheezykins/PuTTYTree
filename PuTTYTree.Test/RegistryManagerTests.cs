@@ -35,19 +35,6 @@ namespace PuTTYTree.Test
         }
 
         [Test]
-        public void GetSubKeysReturnsEmptyOnFail()
-        {
-            RegistryKey hive = Registry.LocalMachine;
-
-            using (RegistryKey regKey = RegistryManager.getKey(hive, badPath))
-            {
-                string[] subkeys = RegistryManager.getSubKeys(regKey);
-
-                Assert.IsEmpty(subkeys);
-            }
-        }
-
-        [Test]
         public void GetSessionsReturnsData()
         {
             RegistryKey hive = Registry.LocalMachine;
@@ -75,6 +62,19 @@ namespace PuTTYTree.Test
             {
                 List<RegistryValue> values = RegistryManager.getSession(regKey);
                 Assert.IsEmpty(values);
+            }
+        }
+
+        [Test]
+        public void GetSubKeysReturnsEmptyOnFail()
+        {
+            RegistryKey hive = Registry.LocalMachine;
+
+            using (RegistryKey regKey = RegistryManager.getKey(hive, badPath))
+            {
+                string[] subkeys = RegistryManager.getSubKeys(regKey);
+
+                Assert.IsEmpty(subkeys);
             }
         }
 

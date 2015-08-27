@@ -1,16 +1,13 @@
 ﻿using Microsoft.Win32;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Forms;
 
-
 namespace PuTTYTree
 {
     internal class SessionCollection : List<Session>
     {
-
         public static SessionCollection loadSessions(string location)
         {
             SessionCollection ret = new SessionCollection();
@@ -30,7 +27,6 @@ namespace PuTTYTree
                                 ret.Add(objSession);
                             }
                         }
-
                     }
                 }
             }
@@ -40,7 +36,6 @@ namespace PuTTYTree
 
         public TreeNode render()
         {
-
             TreeNode root = new TreeNode("Sessions");
 
             root.ImageIndex = 0;
@@ -56,8 +51,6 @@ namespace PuTTYTree
 
                 foreach (string component in components)
                 {
-                    
-
                     if (currentDir.Nodes[component] != null)
                     {
                         currentDir = currentDir.Nodes[component];
@@ -68,14 +61,12 @@ namespace PuTTYTree
                         currentDir.ImageIndex = 2;
                         currentDir.Name = path;
                         currentDir.SelectedImageIndex = currentDir.ImageIndex;
-                        
                     }
                 }
             }
 
             foreach (Session session in this)
             {
-
                 string cleanName = session.cleanName();
 
                 string path = session.Where(p => p.key == "TreeParent").Select(p => p.value).DefaultIfEmpty("").SingleOrDefault();
@@ -96,11 +87,9 @@ namespace PuTTYTree
                 newNode.ImageIndex = 1;
                 newNode.Name = null;
                 newNode.SelectedImageIndex = newNode.ImageIndex;
-
             }
 
             return root;
-
         }
     }
 }
