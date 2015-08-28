@@ -44,6 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateDirectory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateDirectory.Designer.cs">
+      <DependentUpon>CreateDirectory.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainTree.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -57,6 +63,9 @@
     <Compile Include="Session.cs" />
     <Compile Include="SessionCollection.cs" />
     <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="CreateDirectory.resx">
+      <DependentUpon>CreateDirectory.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainTree.resx">
       <DependentUpon>MainTree.cs</DependentUpon>
     </EmbeddedResource>

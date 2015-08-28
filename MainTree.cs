@@ -25,17 +25,36 @@ namespace PuTTYTree
             puttyView.ExpandAll();
         }
 
+        private void createFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (CreateDirectory dirForm = new CreateDirectory())
+            {
+                dirForm.ShowDialog();
+
+                TreeNode newNode = puttyView.SelectedNode.Nodes.Add(dirForm.DirectoryName);
+                newNode.ImageIndex = 2;
+                newNode.SelectedImageIndex = newNode.ImageIndex;
+                newNode.Name = dirForm.DirectoryName;
+                puttyView.SelectedNode.ExpandAll();
+
+                Properties.Settings.Default.Directories.Add(newNode.FullPath);
+                Properties.Settings.Default.Save();
+            }
+        }
+
         private void folderCtxMnu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (puttyView.SelectedNode.Name == "")
             {
                 // in a putty session context
                 cloneToolStripMenuItem.Enabled = true;
+                createFolderToolStripMenuItem.Enabled = false;
             }
             else
             {
                 // in a folder context.
                 cloneToolStripMenuItem.Enabled = false;
+                createFolderToolStripMenuItem.Enabled = true;
             }
         }
 

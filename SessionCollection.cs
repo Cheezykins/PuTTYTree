@@ -40,12 +40,20 @@ namespace PuTTYTree
 
             root.ImageIndex = 0;
             root.SelectedImageIndex = root.ImageIndex;
+            root.Name = "Sessions";
 
             StringCollection directories = Properties.Settings.Default.Directories;
 
             foreach (string path in directories)
             {
-                string[] components = path.Split('\\');
+                string currentPath = path;
+
+                if (path.Substring(0, 8) == "Sessions")
+                {
+                    currentPath = path.Substring(9);
+                }
+
+                string[] components = currentPath.Split('\\');
 
                 TreeNode currentDir = root;
 
@@ -59,7 +67,7 @@ namespace PuTTYTree
                     {
                         currentDir = currentDir.Nodes.Add(component);
                         currentDir.ImageIndex = 2;
-                        currentDir.Name = path;
+                        currentDir.Name = component;
                         currentDir.SelectedImageIndex = currentDir.ImageIndex;
                     }
                 }
@@ -69,7 +77,7 @@ namespace PuTTYTree
             {
                 string cleanName = session.cleanName();
 
-                string path = session.Where(p => p.key == "TreeParent").Select(p => p.value).DefaultIfEmpty("").SingleOrDefault();
+                string path = session.Where(p => p.key == "TreePath").Select(p => p.value).DefaultIfEmpty("").SingleOrDefault();
 
                 TreeNode currentDir = root;
 

@@ -67,33 +67,34 @@
             this.createFolderToolStripMenuItem});
             this.folderCtxMnu.Name = "folderCtxMnu";
             this.folderCtxMnu.ShowImageMargin = false;
-            this.folderCtxMnu.Size = new System.Drawing.Size(120, 92);
+            this.folderCtxMnu.Size = new System.Drawing.Size(128, 114);
             this.folderCtxMnu.Opening += new System.ComponentModel.CancelEventHandler(this.folderCtxMnu_Opening);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // cloneToolStripMenuItem
             // 
             this.cloneToolStripMenuItem.Name = "cloneToolStripMenuItem";
-            this.cloneToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.cloneToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.cloneToolStripMenuItem.Text = "Clone";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // createFolderToolStripMenuItem
             // 
             this.createFolderToolStripMenuItem.Name = "createFolderToolStripMenuItem";
-            this.createFolderToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.createFolderToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.createFolderToolStripMenuItem.Text = "Create Folder";
+            this.createFolderToolStripMenuItem.Click += new System.EventHandler(this.createFolderToolStripMenuItem_Click);
             // 
             // imageList1
             // 
