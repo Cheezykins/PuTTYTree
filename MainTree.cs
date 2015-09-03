@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PuTTYTree
@@ -30,15 +32,17 @@ namespace PuTTYTree
             using (CreateDirectory dirForm = new CreateDirectory())
             {
                 dirForm.ShowDialog();
+                if (dirForm.DialogResult == DialogResult.OK)
+                {
+                    TreeNode newNode = puttyView.SelectedNode.Nodes.Add(dirForm.DirectoryName);
+                    newNode.ImageIndex = 2;
+                    newNode.SelectedImageIndex = newNode.ImageIndex;
+                    newNode.Name = dirForm.DirectoryName;
+                    puttyView.SelectedNode.ExpandAll();
 
-                TreeNode newNode = puttyView.SelectedNode.Nodes.Add(dirForm.DirectoryName);
-                newNode.ImageIndex = 2;
-                newNode.SelectedImageIndex = newNode.ImageIndex;
-                newNode.Name = dirForm.DirectoryName;
-                puttyView.SelectedNode.ExpandAll();
-
-                Properties.Settings.Default.Directories.Add(newNode.FullPath);
-                Properties.Settings.Default.Save();
+                    Properties.Settings.Default.Directories.Add(newNode.FullPath);
+                    Properties.Settings.Default.Save();
+                }
             }
         }
 
@@ -65,7 +69,28 @@ namespace PuTTYTree
 
         private void OpenPutty(TreeNode treeNode)
         {
-            MessageBox.Show(String.Format("Starting putty session {0}", treeNode.Text));
+
+            string savedPuttyPath = Properties.Settings.Default.PuTTYPath;
+
+            if (File.Exists(savedPuttyPath))
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = Properties.Settings.Default.PuTTYPath;
+                startInfo.Arguments = string.Format("-load \"{0}\"", treeNode.Text);
+                Process.Start(startInfo);
+            }
+            else
+            {
+                using (LocatePutty puttyForm = new LocatePutty())
+                {
+                    puttyForm.ShowDialog();
+                    if (puttyForm.DialogResult == DialogResult.OK)
+                    {
+                        Properties.Settings.Default.PuTTYPath = puttyForm.puttyPath;
+                        Properties.Settings.Default.Save();
+                    }
+                }
+            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)

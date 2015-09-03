@@ -50,6 +50,12 @@
     <Compile Include="CreateDirectory.Designer.cs">
       <DependentUpon>CreateDirectory.cs</DependentUpon>
     </Compile>
+    <Compile Include="LocatePutty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LocatePutty.Designer.cs">
+      <DependentUpon>LocatePutty.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainTree.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +71,9 @@
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="CreateDirectory.resx">
       <DependentUpon>CreateDirectory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocatePutty.resx">
+      <DependentUpon>LocatePutty.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainTree.resx">
       <DependentUpon>MainTree.cs</DependentUpon>
