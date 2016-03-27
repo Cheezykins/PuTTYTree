@@ -1,52 +1,54 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using PuTTYTree.Properties;
 
 namespace PuTTYTree
 {
     public partial class MainTree : Form
     {
-        private SessionCollection _sessions;
+        private readonly SessionCollection _sessions;
 
         public MainTree()
         {
             InitializeComponent();
 
-            string regLocation = loadRegLocation();
+            var regLocation = loadRegLocation();
 
-            _sessions = SessionCollection.loadSessions(regLocation);
+            _sessions = SessionCollection.LoadSessions(regLocation);
 
-            render();
+            Render();
         }
 
-        public void render()
+        public void Render()
         {
             puttyView.Nodes.Clear();
-            puttyView.Nodes.Add(_sessions.render());
+            puttyView.Nodes.Add(_sessions.Render());
             puttyView.ExpandAll();
         }
 
         private void createFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (CreateDirectory dirForm = new CreateDirectory())
+            using (var dirForm = new CreateDirectory())
             {
                 dirForm.ShowDialog();
                 if (dirForm.DialogResult == DialogResult.OK)
                 {
-                    TreeNode newNode = puttyView.SelectedNode.Nodes.Add(dirForm.DirectoryName);
+                    var newNode = puttyView.SelectedNode.Nodes.Add(dirForm.DirectoryName);
                     newNode.ImageIndex = 2;
                     newNode.SelectedImageIndex = newNode.ImageIndex;
                     newNode.Name = dirForm.DirectoryName;
                     puttyView.SelectedNode.ExpandAll();
 
-                    Properties.Settings.Default.Directories.Add(newNode.FullPath);
-                    Properties.Settings.Default.Save();
+                    Settings.Default.Directories.Add(newNode.FullPath);
+                    Settings.Default.Save();
                 }
             }
         }
 
-        private void folderCtxMnu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void folderCtxMnu_Opening(object sender, CancelEventArgs e)
         {
             if (puttyView.SelectedNode.Name == "")
             {
@@ -64,31 +66,30 @@ namespace PuTTYTree
 
         private string loadRegLocation()
         {
-            return Properties.Settings.Default.PuTTYRegPath;
+            return Settings.Default.PuTTYRegPath;
         }
 
         private void OpenPutty(TreeNode treeNode)
         {
-
-            string savedPuttyPath = Properties.Settings.Default.PuTTYPath;
+            var savedPuttyPath = Settings.Default.PuTTYPath;
 
             if (File.Exists(savedPuttyPath))
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = Properties.Settings.Default.PuTTYPath;
-                startInfo.Arguments = string.Format("-load \"{0}\"", treeNode.Text);
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = Settings.Default.PuTTYPath,
+                    Arguments = $"-load \"{treeNode.Text}\""
+                };
                 Process.Start(startInfo);
             }
             else
             {
-                using (LocatePutty puttyForm = new LocatePutty())
+                using (var puttyForm = new LocatePutty())
                 {
                     puttyForm.ShowDialog();
-                    if (puttyForm.DialogResult == DialogResult.OK)
-                    {
-                        Properties.Settings.Default.PuTTYPath = puttyForm.puttyPath;
-                        Properties.Settings.Default.Save();
-                    }
+                    if (puttyForm.DialogResult != DialogResult.OK) return;
+                    Settings.Default.PuTTYPath = puttyForm.puttyPath;
+                    Settings.Default.Save();
                 }
             }
         }

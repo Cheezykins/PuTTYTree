@@ -14,7 +14,7 @@ namespace PuTTYTree
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -22,12 +22,12 @@ namespace PuTTYTree
             if (textBox1.Text == "")
             {
                 MessageBox.Show("Directory name must not be empty", "Error");
-                this.DialogResult = System.Windows.Forms.DialogResult.None;
+                DialogResult = DialogResult.None;
             }
             else
             {
                 DirectoryName = textBox1.Text;
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
         }
     }

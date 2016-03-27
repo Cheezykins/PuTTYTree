@@ -1,22 +1,27 @@
-﻿using Microsoft.Win32;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Win32;
+using NUnit.Framework;
 
 namespace PuTTYTree.Test
 {
     [TestFixture]
     public class RegistryManagerTests
     {
-        private static string badPath = @"MyFakeSubClass017895E2-973E-4A13-B9F7-CFF31E187E32";
-        private static string goodPath = @"software\\Microsoft\\Windows\\CurrentVersion";
+        [SetUp]
+        public void SetUp()
+        {
+        }
+
+        private static readonly string badPath = @"MyFakeSubClass017895E2-973E-4A13-B9F7-CFF31E187E32";
+        private static readonly string goodPath = @"software\\Microsoft\\Windows\\CurrentVersion";
 
         [Test]
         public void GetKeyReturnsKeyOnSuccess()
         {
-            RegistryKey regHive = Registry.LocalMachine;
+            var regHive = Registry.LocalMachine;
 
-            using (RegistryKey regKey = RegistryManager.getKey(regHive, goodPath))
+            using (var regKey = RegistryManager.getKey(regHive, goodPath))
             {
                 Assert.IsNotNull(regKey);
                 Assert.IsInstanceOf<RegistryKey>(regKey);
@@ -26,9 +31,9 @@ namespace PuTTYTree.Test
         [Test]
         public void GetKeyReturnsNullOnFailure()
         {
-            RegistryKey regHive = Registry.LocalMachine;
+            var regHive = Registry.LocalMachine;
 
-            using (RegistryKey regKey = RegistryManager.getKey(regHive, badPath))
+            using (var regKey = RegistryManager.getKey(regHive, badPath))
             {
                 Assert.IsNull(regKey);
             }
@@ -37,15 +42,15 @@ namespace PuTTYTree.Test
         [Test]
         public void GetSessionsReturnsData()
         {
-            RegistryKey hive = Registry.LocalMachine;
+            var hive = Registry.LocalMachine;
 
-            using (RegistryKey regKey = RegistryManager.getKey(hive, goodPath))
+            using (var regKey = RegistryManager.getKey(hive, goodPath))
             {
                 List<RegistryValue> values = RegistryManager.getSession(regKey);
 
                 Assert.IsNotEmpty(values);
 
-                RegistryValue value = (RegistryValue)values.Where(r => r.key.Equals("ProgramFilesDir")).Single();
+                var value = values.Where(r => r.key.Equals("ProgramFilesDir")).Single();
 
                 Assert.IsInstanceOf<RegistryValue>(value);
                 Assert.IsInstanceOf<string>(value.value);
@@ -56,9 +61,9 @@ namespace PuTTYTree.Test
         [Test]
         public void GetSessionsReturnsEmptyOnFail()
         {
-            RegistryKey hive = Registry.LocalMachine;
+            var hive = Registry.LocalMachine;
 
-            using (RegistryKey regKey = RegistryManager.getKey(hive, badPath))
+            using (var regKey = RegistryManager.getKey(hive, badPath))
             {
                 List<RegistryValue> values = RegistryManager.getSession(regKey);
                 Assert.IsEmpty(values);
@@ -68,19 +73,14 @@ namespace PuTTYTree.Test
         [Test]
         public void GetSubKeysReturnsEmptyOnFail()
         {
-            RegistryKey hive = Registry.LocalMachine;
+            var hive = Registry.LocalMachine;
 
-            using (RegistryKey regKey = RegistryManager.getKey(hive, badPath))
+            using (var regKey = RegistryManager.getKey(hive, badPath))
             {
-                string[] subkeys = RegistryManager.getSubKeys(regKey);
+                var subkeys = RegistryManager.getSubKeys(regKey);
 
                 Assert.IsEmpty(subkeys);
             }
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
         }
     }
 }

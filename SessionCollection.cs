@@ -1,32 +1,36 @@
-﻿using Microsoft.Win32;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Win32;
+using PuTTYTree.Properties;
 
 namespace PuTTYTree
 {
+    /// <summary>
+    /// 
+    /// </summary>
     internal class SessionCollection : List<Session>
     {
-        public static SessionCollection loadSessions(string location)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public static SessionCollection LoadSessions(string location)
         {
-            SessionCollection ret = new SessionCollection();
+            var ret = new SessionCollection();
 
-            using (RegistryKey sessions = RegistryManager.getKey(Registry.CurrentUser, location))
+            using (var sessions = RegistryManager.getKey(Registry.CurrentUser, location))
             {
-                if (sessions != null)
+                if (sessions == null) return ret;
+                foreach (var sessionKey in RegistryManager.getSubKeys(sessions))
                 {
-                    foreach (string sessionKey in RegistryManager.getSubKeys(sessions))
+                    using (var session = RegistryManager.getKey(Registry.CurrentUser, location + sessionKey))
                     {
-                        using (RegistryKey session = RegistryManager.getKey(Registry.CurrentUser, location + sessionKey))
-                        {
-                            if (session != null)
-                            {
-                                Session objSession = RegistryManager.getSession(session);
-                                objSession.name = sessionKey;
-                                ret.Add(objSession);
-                            }
-                        }
+                        if (session == null) continue;
+                        var objSession = RegistryManager.getSession(session);
+                        objSession.name = sessionKey;
+                        ret.Add(objSession);
                     }
                 }
             }
@@ -34,30 +38,38 @@ namespace PuTTYTree
             return ret;
         }
 
-        public TreeNode render()
+        /// <summary>
+        /// The render.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="TreeNode"/>.
+        /// </returns>
+        public TreeNode Render()
         {
-            TreeNode root = new TreeNode("Sessions");
-
-            root.ImageIndex = 0;
-            root.SelectedImageIndex = root.ImageIndex;
-            root.Name = "Sessions";
-
-            StringCollection directories = Properties.Settings.Default.Directories;
-
-            foreach (string path in directories)
+            var root = new TreeNode("Sessions")
             {
-                string currentPath = path;
+                ImageIndex = 0,
+                Name = "Session"
+            };
+
+            root.SelectedImageIndex = root.ImageIndex;
+
+            var directories = Settings.Default.Directories;
+
+            foreach (var path in directories)
+            {
+                var currentPath = path;
 
                 if (path.Substring(0, 8) == "Sessions")
                 {
                     currentPath = path.Substring(9);
                 }
 
-                string[] components = currentPath.Split('\\');
+                var components = currentPath.Split('\\');
 
-                TreeNode currentDir = root;
+                var currentDir = root;
 
-                foreach (string component in components)
+                foreach (var component in components)
                 {
                     if (currentDir.Nodes[component] != null)
                     {
@@ -73,25 +85,26 @@ namespace PuTTYTree
                 }
             }
 
-            foreach (Session session in this)
+            foreach (var session in this)
             {
-                string cleanName = session.cleanName();
+                var cleanName = session.cleanName();
 
-                string path = session.Where(p => p.key == "TreePath").Select(p => p.value).DefaultIfEmpty("").SingleOrDefault();
+                var path =
+                    session.Where(p => p.key == "TreePath").Select(p => p.value).DefaultIfEmpty(string.Empty).SingleOrDefault();
 
-                TreeNode currentDir = root;
+                var currentDir = root;
 
-                if (path != "")
+                if (path != string.Empty)
                 {
-                    string[] components = path.Split('\\');
-
-                    foreach (string component in components)
+                    if (path != null)
                     {
-                        currentDir = currentDir.Nodes[component];
+                        var components = path.Split('\\');
+
+                        currentDir = components.Aggregate(currentDir, (current, component) => current.Nodes[component]);
                     }
                 }
 
-                TreeNode newNode = currentDir.Nodes.Add(cleanName);
+                var newNode = currentDir.Nodes.Add(cleanName);
                 newNode.ImageIndex = 1;
                 newNode.Name = null;
                 newNode.SelectedImageIndex = newNode.ImageIndex;

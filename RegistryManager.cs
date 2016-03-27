@@ -11,15 +11,15 @@ namespace PuTTYTree
 
         public static Session getSession(RegistryKey registryKey)
         {
-            Session ret = new Session();
+            var ret = new Session();
 
             if (registryKey != null)
             {
-                string[] valueKeys = registryKey.GetValueNames();
+                var valueKeys = registryKey.GetValueNames();
 
-                foreach (string key in valueKeys)
+                foreach (var key in valueKeys)
                 {
-                    RegistryValue value = new RegistryValue()
+                    var value = new RegistryValue
                     {
                         kind = registryKey.GetValueKind(key),
                         key = key,
@@ -35,7 +35,7 @@ namespace PuTTYTree
 
         public static string[] getSubKeys(RegistryKey registryKey)
         {
-            string[] subKeys = new string[] { };
+            string[] subKeys = {};
 
             if (registryKey != null)
             {
